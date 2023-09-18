@@ -24,7 +24,7 @@ services:
     labels:
       - 'traefik.enable=true'
       ####################################### insert your domain name here ################
-      - 'traefik.http.routers.flask.rule=Host(`tyo.ddns.net) && PathPrefix(`/`)'
+      - 'traefik.http.routers.flask.rule=Host(`tyo.ddns.net`) && PathPrefix(`/`)'
       - 'traefik.http.routers.flask.entrypoints=websecure'
       - "traefik.http.routers.flask.tls.certresolver=myresolver"
       - 'traefik.http.routers.flask.tls=true'
