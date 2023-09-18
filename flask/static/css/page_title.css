@@ -1,0 +1,84 @@
+/* styles.css */
+
+h1 {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    /*color: whitesmoke;*/
+}
+
+h2 {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    /*color: whitesmoke;*/
+}
+
+p{
+    /*color: whitesmoke;*/
+    font-family: Arial, sans-serif;
+}
+
+.affiche{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.affiche-image{
+    margin-right: 1%;
+    width: 20%;
+}
+
+.image{
+    width: 100%;
+    height: auto;
+}
+
+.affiche-text{
+    text-overflow: clip;
+    width: 25%;
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centrer horizontalement */
+}
+
+.form-data{
+    display: flex;
+    flex-direction: column;
+    width: 20%
+}
+
+.form {
+    border: 1px solid #ccc; /* Ajoutez une bordure pour les formulaires */
+    padding: 6px; /* Ajoutez un espace intérieur aux formulaires */
+    margin-bottom: 10px; /* Ajoutez un espace entre les formulaires */
+    border-radius: 7px; /* Arrondir les coins des formulaires */
+}
+
+.cinema{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.cinema-image {
+    display: block;
+    height: auto;
+    width: 110%;
+    margin-left: -5%;
+    position: relative;
+}
+
+.cinema-text {
+    position: relative;
+    transform: translate(0,-200px); /* Centre le texte par rapport à son propre centre */
+    font-size: 60px; /* Taille du texte en pixels */
+    color: red; /* Couleur du texte en rouge */
+    text-transform: uppercase; /* Mettre le texte en majuscules */
+    font-family: Arial, sans-serif; /* Utiliser la police Arial */
+}
+

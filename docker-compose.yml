@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  traefik:
+    image: traefik:v2.5
+    network_mode: "host"
+    container_name: traefik
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.websecure.address=:443" 
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      ################################################ insert your email here ################
+      - "--certificatesresolvers.myresolver.acme.email=thebaultyoann56@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    volumes:
+      - "./letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      
+  flask:
+    build:
+      context: ./Flask/
+      dockerfile: Dockerfile"
+    labels:
+      - 'traefik.enable=true'
+      ####################################### insert your domain name here ################
+      - 'traefik.http.routers.fastapi-user.rule=Host(`DOMAINNAME.com`) && PathPrefix(`/`)'
+      - 'traefik.http.routers.fastapi-user.entrypoints=websecure'
+      - "traefik.http.routers.fastapi-user.tls.certresolver=myresolver"
+      - 'traefik.http.routers.fastapi-user.tls=true'
+      - 'traefik.http.services.fastapi-user.loadbalancer.server.port=5000'
+    container_name: flask
+    restart: "on-failure:5" 

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title class="title">{{ page.title }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/page_title.css') }}">
+</head>
+<body>
+    <h1>Formulaire d'inscription TYO</h1>
+    <div class="cinema">
+        <img class="cinema-image" src="{{ url_for('static', filename='cinema.svg')}}" alt="{{ page.title }} Image">
+        <h2 class= "cinema-text">{{ page.title }}</h2>
+    </div>  
+    <div class="affiche">
+        <div class="affiche-image">
+            {% if page.image %}
+                <img class="image" src="{{ url_for('static', filename='uploads/' + page.image) }}" alt="{{ page.title }} Image">
+            {% endif %}
+        </div>
+        <div class="affiche-text">
+            <p><strong>Date :</strong> {{ page.date }}</p>
+            <p><strong>Emplacement :</strong> {{ page.location }}</p>
+            <p><strong>Nombre Maximum de Participants :</strong> {{ page.max_participants }}</p>
+            <p>Cette séance est gratuite pour les cotisants TYO, et coûte {{ page.cost }} pour les non-cotisants</p>
+        </div>
+    </div> 
+    
+    <h2>Inscris-toi !</h2>
+    <div class="form-container">
+        <form class="form-data" method="POST" action="/page/{{page.title}}" enctype="multipart/form-data">
+            <label for="lastname">Nom :</label>
+            <input class="form" type="text" name="lastname" id="lastname" required>
+            
+            <label for="firstname">Prénom :</label>
+            <input class="form" type="text" name="firstname" id="firstname" required>
+            
+            <label for="email">Email :</label>
+            <input class="form" type="text" name="email" id="email" required>
+
+            <label for="phone">Téléphone :</label>
+            <input class="form" type="text" name="phone" id="phone" required>
+            
+            <div>
+            <p class="reponse"></p>
+            <p class="reponse2"></p>
+            </div>
+
+            <input type="submit" value="S'inscrire">
+        
+        </form>
+    </div>
+    
+    <br><br>
+
+    <script>
+        // Fonction pour envoyer une requête à /check_cotisant
+        function checkCotisant() {
+            const email = document.getElementById("email").value;
+            const phone = document.getElementById("phone").value;
+
+            // Crée un objet JSON avec les données d'email et de téléphone
+            const data = { email, phone };
+
+            // Envoie une requête POST à /check_cotisant avec les données JSON
+            fetch("/check_cotisant", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.text())
+            .then(message => {
+                // Met la réponse dans un élément de la page (par exemple, sous le formulaire de téléphone)
+                const reponseElement = document.querySelector(".reponse");
+                reponseElement.textContent = message;
+            })
+            .catch(error => {
+                console.error("Erreur lors de la requête à /check_cotisant:", error);
+            });
+        }
+
+        // Ajoute un événement "input" aux champs Email et Téléphone pour appeler checkCotisant lors de la modification
+        document.getElementById("email").addEventListener("input", checkCotisant);
+        document.getElementById("phone").addEventListener("input", checkCotisant);
+    </script>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function checkRegistration() {
+            const email = document.getElementById("email").value;
+            const phone = document.getElementById("phone").value;
+            const lastname = document.getElementById("lastname").value;
+            const firstname = document.getElementById("firstname").value;
+            const title = "{{page.title}}";
+            const data = { email, phone, lastname, firstname, title};
+
+            // Envoie une requête POST à /check_cotisant avec les données JSON
+            fetch("/check_registration", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.text())
+            .then(message => {   
+                if(message == "True") {
+                    const reponseElement = document.querySelector(".reponse2");
+                    reponseElement.textContent = "Ce mail, ce numéro de téléphone ou cette combinaison de nom prénom sont déjà inscrits";
+                    reponseElement.style.color = "red";
+                    const submitButton = document.querySelector("input[type='submit']");
+                    submitButton.disabled = true;
+                }
+                if(message == "False") {
+                    const reponseElement = document.querySelector(".reponse2");
+                    reponseElement.textContent = "";
+                    reponseElement.style.color = "red";
+                    const submitButton = document.querySelector("input[type='submit']");
+                    submitButton.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error("Erreur lors de la requête à /check_registration:", error);
+            });
+        }
+        document.getElementById("email").addEventListener("input", checkRegistration);
+        document.getElementById("phone").addEventListener("input", checkRegistration);
+        document.getElementById("lastname").addEventListener("input", checkRegistration);
+        document.getElementById("firstname").addEventListener("input", checkRegistration);
+    </script>
+</body>
+</html>

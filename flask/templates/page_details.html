@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Détails de la Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Détails de la Page</h1>
+    <h2>{{ page.title }}</h2>
+    <p><strong>Date :</strong> {{ page.date }}</p>
+    <p><strong>Emplacement :</strong> {{ page.location }}</p>
+    <p><strong>Nombre Maximum de Participants :</strong> {{ page.max_participants }}</p>
+    <p><strong>Coût :</strong> {{ page.cost }}</p>
+    
+    {% if page.image %}
+        <img src="{{ url_for('static', filename='uploads/' + page.image) }}" alt="{{ page.title }} Image">
+    {% endif %}
+    
+    <h2>Liste des Inscrits</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr class=user{{user.id}}>
+                    <td>{{ user.lastname }}</td>
+                    <td>{{ user.firstname }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.phone }}</td>
+                    <td>
+                        <button class="delete-user" data-user-id="{{ user.id }}">Supprimer</button>
+                        <button class="update-user" data-user-id="{{ user.id }}" data-user-lastname="{{ user.lastname }}" data-user-firstname="{{ user.firstname}}" data-user-email="{{ user.email}}" data-user-phone="{{ user.phone}}">Modifier</button>
+                    </td>
+                </tr>
+            {% endfor %} 
+        </tbody>
+    </table>
+
+    <br> 
+
+    <button id="toggle-form-button">Ajouter un nouveau participant</button>
+
+        <!-- Form for adding cotisants (initially hidden) -->
+    <form method="POST" action="/add_user/{{page.id}}" id="add-user-form" style="display: none;">
+        <label>Last Name:</label>
+        <input type="text" name="lastname" required><br>
+        <label>First Name:</label>
+        <input type="text" name="firstname" required><br>
+        <label>Email:</label>
+        <input type="email" name="email" required><br>
+        <label>Phone:</label>
+        <input type="text" name="phone" required><br>
+        <button type="submit">Ajouter</button>
+    </form>
+    
+    <br>
+    <br>
+    
+    <a href="{{ url_for('download_users_ods', page_id=page.id) }}" class="btn btn-primary">Télécharger les utilisateurs au format. ods</a><br>
+    <a href="{{ url_for('download_users_pdf', page_id=page.id) }}" class="btn btn-primary">Télécharger les utilisateurs au format. pdf</a><br>
+
+    <br><br>
+
+    <button id="send-email-button">Envoyer la liste par e-mail</button>
+
+    <br><br>
+
+    <a href="{{ url_for('home') }}">Retour à la page d'accueil</a>
+
+    <script>
+        document.getElementById('toggle-form-button').addEventListener('click', function() {
+            var form = document.getElementById('add-user-form');
+            if (form.style.display === 'none' || form.style.display === '') {
+                form.style.display = 'block';
+            } else {
+                form.style.display = 'none';
+            }
+        });
+    </script>
+
+
+
+    <script>
+        $(document).ready(function() {
+            $(".delete-user").click(function(e) {
+                e.preventDefault();
+                var userId = $(this).data("user-id");
+                var data = { user_id: userId };
+                $.ajax({
+                    url: "/delete_user",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function(response) {
+                        console.log(response);
+                        var userElement = $(".user" + userId);
+                        userElement.remove();
+                    },
+                    error: function(error) {
+                        console.error(error);
+                    }
+                });
+            });
+        });
+
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $(document).on("click", ".delete-user", function(e) {
+                e.preventDefault();
+                var userId = $(this).data("user-id");
+                var data = { user_id: userId };
+                $.ajax({
+                    url: "/delete_user",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function(response) {
+                        console.log(response);
+                        var userElement = $(".user" + userId);
+                        userElement.remove();
+                    },
+                    error: function(error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+            var originalUserData = {};
+
+            $(document).on("click", ".update-user", function(e) {
+                e.preventDefault();
+                var userId = $(this).data("user-id");
+                var userLastname = $(this).data("user-lastname");
+                var userFirstname = $(this).data("user-firstname");
+                var userEmail = $(this).data("user-email");
+                var userPhone = $(this).data("user-phone");
+
+                originalUserData[userId] = {
+                    lastname: userLastname,
+                    firstname: userFirstname,
+                    email: userEmail,
+                    phone: userPhone
+                };
+
+                var userRow = $(".user" + userId);
+                var formHtml = `
+                    <tr class="user${userId}">
+                        <td><input type="text" name="lastname" value="${userLastname}"></td>
+                        <td><input type="text" name="firstname" value="${userFirstname}"></td>
+                        <td><input type="text" name="email" value="${userEmail}"></td>
+                        <td><input type="text" name="phone" value="${userPhone}"></td>
+                        <td>
+                            <button class="save-update" data-user-id="${userId}">Sauvegarder</button>
+                            <button class="cancel-update" data-user-id="${userId}">Annuler</button>
+                        </td>
+                    </tr>
+                `;
+                userRow.replaceWith(formHtml);
+            });
+
+            $(document).on("click", ".save-update", function(e) {
+                e.preventDefault();
+                var userId = $(this).data("user-id");
+                var updatedLastname = $(`.user${userId} input[name="lastname"]`).val();
+                var updatedFirstname = $(`.user${userId} input[name="firstname"]`).val();
+                var updatedEmail = $(`.user${userId} input[name="email"]`).val();
+                var updatedPhone = $(`.user${userId} input[name="phone"]`).val();
+
+                $.ajax({
+                    url: "/update_user",
+                    type: "POST",
+                    data: {
+                        user_id: userId,
+                        firstname: updatedFirstname,
+                        lastname: updatedLastname,
+                        email: updatedEmail,
+                        phone: updatedPhone
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        var userRowHtml = `
+                            <tr class="user${userId}">
+                                <td>${updatedLastname}</td>
+                                <td>${updatedFirstname}</td>
+                                <td>${updatedEmail}</td>
+                                <td>${updatedPhone}</td>
+                                <td>
+                                    <button class="delete-user" data-user-id="${userId}">Supprimer</button>
+                                    <button class="update-user" data-user-id="${userId}" data-user-lastname="${updatedLastname}" data-user-firstname="${updatedFirstname}" data-user-email="${updatedEmail}" data-user-phone="${updatedPhone}">Modifier</button>
+                                </td>
+                            </tr>
+                        `;
+                        $(".user" + userId).replaceWith(userRowHtml);
+                    },
+                    error: function(error) {
+                        console.error(error);
+                        var userId = $(this).data("user-id");
+                        restoreOriginalUserData(userId);
+                    }
+                });
+            });
+
+            $(document).on("click", ".cancel-update", function(e) {
+                e.preventDefault();
+                var userId = $(this).data("user-id");
+                restoreOriginalUserData(userId);
+            });
+        });
+
+        function restoreOriginalUserData(userId) {
+            var userLastname = originalUserData[userId].lastname;
+            var userFirstname = originalUserData[userId].firstname;
+            var userEmail = originalUserData[userId].email;
+            var userPhone = originalUserData[userId].phone;
+
+            var userRowHtml = `
+                <tr class="user${userId}">
+                    <td>${userLastname}</td>
+                    <td>${userFirstname}</td>
+                    <td>${userEmail}</td>
+                    <td>${userPhone}</td>
+                    <td>
+                        <button class="delete-user" data-user-id="${userId}">Supprimer</button>
+                        <button class="update-user" data-user-id="${userId}" data-user-lastname="${userLastname}" data-user-firstname="${userFirstname}" data-user-email="${userEmail}" data-user-phone="${userPhone}">Modifier</button>
+                    </td>
+                </tr>
+            `;
+
+            $(".user" + userId).replaceWith(userRowHtml);
+        }
+    </script>
+    
+    <script>
+        $(document).ready(function() {
+            // Define a function to convert an array of objects to a CSV string
+            function convertToCSV(objArray) {
+                var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+                var str = '';
+
+                for (var i = 0; i < array.length; i++) {
+                    var line = '';
+                    for (var index in array[i]) {
+                        if (line != '') line += ',';
+
+                        line += array[i][index];
+                    }
+
+                    str += line + '\r\n';
+                }
+
+                return str;
+            }
+
+            $(".download-csv").click(function() {
+                var users = [];
+                // Extract user data from the table and push it into the users array
+                $(".user-row").each(function() {
+                    var user = {
+                        Nom: $(this).find(".user-lastname").text(),
+                        Prénom: $(this).find(".user-firstname").text(),
+                        Email: $(this).find(".user-email").text(),
+                        Phone:  $(this).find(".user-phone").text()
+                    };
+                    users.push(user);
+                });
+
+                // Create a CSV string from the users array
+                var csv = convertToCSV(users);
+
+                // Create a data URI for the CSV and trigger a download
+                var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                var link = document.createElement("a");
+                if (link.download !== undefined) {
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", "user_data.csv");
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $("#send-email-button").click(function() {
+                // Effectuez une requête AJAX pour obtenir la liste des participants
+                $.ajax({
+                    url: "/get_user_list/{{page.id}}",
+                    type: "GET",
+                    success: function(response) {
+                        if (response && response.length > 0) {
+                            // Convertissez la liste des participants en une chaîne lisible
+                            var userText = "Liste des participants :\n";
+                            for (var i = 0; i < response.length; i++) {
+                                userText += response[i].firstname + " " + response[i].lastname + " - " + response[i].email + " - " + response[i].phone + "\n";
+                            }
+
+                            // Effectuez une autre requête AJAX pour envoyer l'e-mail
+                            $.ajax({
+                                url: "/send_user_list_email",
+                                type: "POST",
+                                contentType: "application/json",
+                                data: JSON.stringify({ userText: userText }),
+                                success: function(emailResponse) {
+                                    if (emailResponse && emailResponse.success) {
+                                        alert("La liste des participants a été envoyée par e-mail avec succès !");
+                                    } else {
+                                        alert("Erreur lors de l'envoi de l'e-mail.");
+                                    }
+                                },
+                                error: function(error) {
+                                    console.error(error);
+                                    alert("Erreur lors de l'envoi de l'e-mail.");
+                                }
+                            });
+                        } else {
+                            alert("Aucun participant à envoyer.");
+                        }
+                    },
+                    error: function(error) {
+                        console.error(error);
+                        alert("Erreur lors de la récupération de la liste des participants.");
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

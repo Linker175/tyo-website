@@ -1,0 +1,21 @@
+<form method="POST" action="/create_page" enctype="multipart/form-data">
+    <label for="title">Titre :</label>
+    <input type="text" name="title" required><br><br>
+    
+    <label for="date">Date :</label>
+    <input type="text" name="date"><br><br>
+    
+    <label for="image">Image (choisissez un fichier) :</label>
+    <input type="file" name="image" accept="image/*" required><br><br>
+    
+    <label for="location">Lieu :</label>
+    <input type="text" name="location"><br><br>
+    
+    <label for="max_participants">Nombre Maximum de Participants :</label>
+    <input type="number" name="max_participants"><br><br>
+    
+    <label for="cost">Coût de Participation :</label>
+    <input type="number" step="0.01" name="cost"><br><br>
+    
+    <input type="submit" value="Créer la Page">
+</form>

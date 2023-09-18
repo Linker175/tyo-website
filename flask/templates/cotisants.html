@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Modifier les cotisants</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Modifier les Cotisants</h1>
+
+    <!-- Button to toggle the "Add Cotisant" form -->
+    <button id="toggle-form-button">Ajouter un nouveau cotisant</button>
+
+    <!-- Form for adding cotisants (initially hidden) -->
+    <form method="POST" action="/add_cotisant" id="add-cotisant-form" style="display: none;">
+        <label>Last Name:</label>
+        <input type="text" name="lastname" required><br>
+        <label>First Name:</label>
+        <input type="text" name="firstname" required><br>
+        <label>Email:</label>
+        <input type="email" name="email" required><br>
+        <label>Phone:</label>
+        <input type="text" name="phone" required><br>
+        <button type="submit">Ajouter un cotisant</button>
+    </form>
+
+    <!-- Display the list of cotisants -->
+    <h2>Liste des Cotisant</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cotisant in cotisants %}
+                <tr class=cotisant{{cotisant.id}}>
+                    <td>{{ cotisant.lastname }}</td>
+                    <td>{{ cotisant.firstname }}</td>
+                    <td>{{ cotisant.email }}</td>
+                    <td>{{ cotisant.phone }}</td>
+                    <td>
+                        <button class="delete-cotisant" data-cotisant-id="{{ cotisant.id }}">Supprimer</button>
+                        <button class="update-cotisant" data-cotisant-id="{{ cotisant.id }}" data-cotisant-lastname="{{ cotisant.lastname }}" data-cotisant-firstname="{{ cotisant.firstname}}" data-cotisant-email="{{ cotisant.email}}" data-cotisant-phone="{{ cotisant.phone}}">Modifier</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('home') }}">Retour à la page d'accueil</a>
+    
+    <!-- JavaScript to toggle the form's visibility -->
+
+    <script>
+        document.getElementById('toggle-form-button').addEventListener('click', function() {
+            var form = document.getElementById('add-cotisant-form');
+            if (form.style.display === 'none' || form.style.display === '') {
+                form.style.display = 'block';
+            } else {
+                form.style.display = 'none';
+            }
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $(document).on("click", ".delete-cotisant", function(e) {
+                e.preventDefault();
+                var cotisantId = $(this).data("cotisant-id");
+                var data = { cotisant_id: cotisantId };
+                $.ajax({
+                    url: "/delete_cotisant",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function(response) {
+                        console.log(response);
+                        var cotisantElement = $(".cotisant" + cotisantId);
+                        cotisantElement.remove();
+                    },
+                    error: function(error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+            var originalcotisantData = {};
+
+            $(document).on("click", ".update-cotisant", function(e) {
+                e.preventDefault();
+                var cotisantId = $(this).data("cotisant-id");
+                var cotisantLastname = $(this).data("cotisant-lastname");
+                var cotisantFirstname = $(this).data("cotisant-firstname");
+                var cotisantEmail = $(this).data("cotisant-email");
+                var cotisantPhone = $(this).data("cotisant-phone");
+
+                originalcotisantData[cotisantId] = {
+                    lastname: cotisantLastname,
+                    firstname: cotisantFirstname,
+                    email: cotisantEmail,
+                    phone: cotisantPhone
+                };
+
+                var cotisantRow = $(".cotisant" + cotisantId);
+                var formHtml = `
+                    <tr class="cotisant${cotisantId}">
+                        <td><input type="text" name="lastname" value="${cotisantLastname}"></td>
+                        <td><input type="text" name="firstname" value="${cotisantFirstname}"></td>
+                        <td><input type="text" name="email" value="${cotisantEmail}"></td>
+                        <td><input type="text" name="phone" value="${cotisantPhone}"></td>
+                        <td>
+                            <button class="save-update" data-cotisant-id="${cotisantId}">Sauvegarder</button>
+                            <button class="cancel-update" data-cotisant-id="${cotisantId}">Annuler</button>
+                        </td>
+                    </tr>
+                `;
+                cotisantRow.replaceWith(formHtml);
+            });
+
+            $(document).on("click", ".save-update", function(e) {
+                e.preventDefault();
+                var cotisantId = $(this).data("cotisant-id");
+                var updatedLastname = $(`.cotisant${cotisantId} input[name="lastname"]`).val();
+                var updatedFirstname = $(`.cotisant${cotisantId} input[name="firstname"]`).val();
+                var updatedEmail = $(`.cotisant${cotisantId} input[name="email"]`).val();
+                var updatedPhone = $(`.cotisant${cotisantId} input[name="phone"]`).val();
+
+                $.ajax({
+                    url: "/update_cotisant",
+                    type: "POST",
+                    data: {
+                        cotisant_id: cotisantId,
+                        firstname: updatedFirstname,
+                        lastname: updatedLastname,
+                        email: updatedEmail,
+                        phone: updatedPhone
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        var cotisantRowHtml = `
+                            <tr class="cotisant${cotisantId}">
+                                <td>${updatedLastname}</td>
+                                <td>${updatedFirstname}</td>
+                                <td>${updatedEmail}</td>
+                                <td>${updatedPhone}</td>
+                                <td>
+                                    <button class="delete-cotisant" data-cotisant-id="${cotisantId}">Supprimer</button>
+                                    <button class="update-cotisant" data-cotisant-id="${cotisantId}" data-cotisant-lastname="${updatedLastname}" data-cotisant-firstname="${updatedFirstname}" data-cotisant-email="${updatedEmail}" data-cotisant-phone="${updatedPhone}">Modifier</button>
+                                </td>
+                            </tr>
+                        `;
+                        $(".cotisant" + cotisantId).replaceWith(cotisantRowHtml);
+                    },
+                    error: function(error) {
+                        console.error(error);   
+                        restoreOriginalcotisantData(cotisantId);
+                    }
+                });
+            });
+
+            $(document).on("click", ".cancel-update", function(e) {
+                e.preventDefault();
+                var cotisantId = $(this).data("cotisant-id");
+                restoreOriginalcotisantData(cotisantId);
+            });
+       
+
+
+            function restoreOriginalcotisantData(cotisantId) {
+                var cotisantLastname = originalcotisantData[cotisantId].lastname;
+                var cotisantFirstname = originalcotisantData[cotisantId].firstname;
+                var cotisantEmail = originalcotisantData[cotisantId].email;
+                var cotisantPhone = originalcotisantData[cotisantId].phone;
+
+                var cotisantRowHtml = `
+                    <tr class="cotisant${cotisantId}">
+                        <td>${cotisantLastname}</td>
+                        <td>${cotisantFirstname}</td>
+                        <td>${cotisantEmail}</td>
+                        <td>${cotisantPhone}</td>
+                        <td>
+                            <button class="delete-cotisant" data-cotisant-id="${cotisantId}">Supprimer</button>
+                            <button class="update-cotisant" data-cotisant-id="${cotisantId}" data-cotisant-lastname="${cotisantLastname}" data-cotisant-firstname="${cotisantFirstname}" data-cotisant-email="${cotisantEmail}" data-cotisant-phone="${cotisantPhone}">Modifier</button>
+                        </td>
+                    </tr>
+                `;
+
+                $(".cotisant" + cotisantId).replaceWith(cotisantRowHtml);
+            }
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            // Define a function to convert an array of objects to a CSV string
+            function convertToCSV(objArray) {
+                var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+                var str = '';
+
+                for (var i = 0; i < array.length; i++) {
+                    var line = '';
+                    for (var index in array[i]) {
+                        if (line != '') line += ',';
+
+                        line += array[i][index];
+                    }
+
+                    str += line + '\r\n';
+                }
+
+                return str;
+            }
+
+            $(".download-csv").click(function() {
+                var cotisants = [];
+                // Extract cotisant data from the table and push it into the cotisants array
+                $(".cotisant-row").each(function() {
+                    var cotisant = {
+                        Nom: $(this).find(".cotisant-lastname").text(),
+                        Prénom: $(this).find(".cotisant-firstname").text(),
+                        Email: $(this).find(".cotisant-email").text()
+                    };
+                    cotisants.push(cotisant);
+                });
+
+                // Create a CSV string from the cotisants array
+                var csv = convertToCSV(cotisants);
+
+                // Create a data URI for the CSV and trigger a download
+                var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                var link = document.createElement("a");
+                if (link.download !== undefined) {
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", "cotisant_data.csv");
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
