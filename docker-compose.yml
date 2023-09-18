@@ -20,14 +20,14 @@ services:
   flask:
     build:
       context: ./Flask/
-      dockerfile: Dockerfile"
+      dockerfile: Dockerfile
     labels:
       - 'traefik.enable=true'
       ####################################### insert your domain name here ################
-      - 'traefik.http.routers.fastapi-user.rule=Host(`tyo.ddns.net) && PathPrefix(`/`)'
-      - 'traefik.http.routers.fastapi-user.entrypoints=websecure'
-      - "traefik.http.routers.fastapi-user.tls.certresolver=myresolver"
-      - 'traefik.http.routers.fastapi-user.tls=true'
-      - 'traefik.http.services.fastapi-user.loadbalancer.server.port=5000'
+      - 'traefik.http.routers.flask.rule=Host(`tyo.ddns.net) && PathPrefix(`/`)'
+      - 'traefik.http.routers.flask.entrypoints=websecure'
+      - "traefik.http.routers.flask.tls.certresolver=myresolver"
+      - 'traefik.http.routers.flask.tls=true'
+      - 'traefik.http.services.flask.loadbalancer.server.port=5000'
     container_name: flask
     restart: "on-failure:5" 

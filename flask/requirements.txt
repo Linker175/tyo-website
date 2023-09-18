@@ -3,5 +3,4 @@ bcrypt
 pyopt
 flask_sqlalchemy
 flask_uploads
-smtplib
 gunicorn
