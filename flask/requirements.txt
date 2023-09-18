@@ -4,4 +4,8 @@ pyotp
 flask_sqlalchemy
 flask_uploads
 flask_login
+pyexcel
 gunicorn
+pyexcel-ezodf     
+pyexcel-io      
+pyexcel-ods3      
