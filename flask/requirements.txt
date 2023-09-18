@@ -9,3 +9,4 @@ gunicorn
 pyexcel-ezodf     
 pyexcel-io      
 pyexcel-ods3      
+reportlab
