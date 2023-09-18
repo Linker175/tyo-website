@@ -13,4 +13,4 @@ RUN sed -i '26d' /usr/local/lib/python3.11/site-packages/flask_uploads.py && \
     awk 'NR==25{print; print "from werkzeug.utils import secure_filename\nfrom werkzeug.datastructures import FileStorage"} NR!=25' /usr/local/lib/python3.11/site-packages/flask_uploads.py > /usr/local/lib/python3.11/site-packages/flask_uploads_modified.py && \
     mv /usr/local/lib/python3.11/site-packages/flask_uploads_modified.py /usr/local/lib/python3.11/site-packages/flask_uploads.py
 
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app;app"]
+CMD ["gunicorn", "-w", "1", "-b", "0.0.0.0:5000", "app:app"]
