@@ -24,7 +24,7 @@ services:
     labels:
       - 'traefik.enable=true'
       ####################################### insert your domain name here ################
-      - 'traefik.http.routers.fastapi-user.rule=Host(`DOMAINNAME.com`) && PathPrefix(`/`)'
+      - 'traefik.http.routers.fastapi-user.rule=Host(`tyo.ddns.net) && PathPrefix(`/`)'
       - 'traefik.http.routers.fastapi-user.entrypoints=websecure'
       - "traefik.http.routers.fastapi-user.tls.certresolver=myresolver"
       - 'traefik.http.routers.fastapi-user.tls=true'
