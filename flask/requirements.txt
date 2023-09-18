@@ -1,6 +1,6 @@
 flask
 bcrypt
-pyopt
+pyotp
 flask_sqlalchemy
 flask_uploads
 flask_login
