@@ -19,7 +19,7 @@ services:
       
   flask:
     build:
-      context: ./Flask/
+      context: ./flask/
       dockerfile: Dockerfile
     labels:
       - 'traefik.enable=true'
