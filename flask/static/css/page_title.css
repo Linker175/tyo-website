@@ -75,7 +75,7 @@ p{
 
 .cinema-text {
     position: relative;
-    transform: translate(0,-200px); /* Centre le texte par rapport à son propre centre */
+    /* transform: translate(0,-200px); /* Centre le texte par rapport à son propre centre */
     font-size: 60px; /* Taille du texte en pixels */
     color: red; /* Couleur du texte en rouge */
     text-transform: uppercase; /* Mettre le texte en majuscules */

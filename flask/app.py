@@ -168,7 +168,10 @@ def page_title(title):
         else:
             return "Utilisateur déjà enregistré avec cette combinaison nom/prénom, cette adresse mail ou ce numéro de téléphone"
     if page:
-        return render_template('page_title.html', page=page)
+        users = User.query.filter_by(id=page.id).all()
+        if users:
+            places = page.max_participants - len(users)
+            return render_template('page_title.html', page=page, places=places)
     else:
         return "Page non trouvée"
     
@@ -347,7 +350,25 @@ def check_cotisant():
             if cotisant_mail== email.lower() or cotisant_phone == phone.lower():
                 return "Vous êtes cotisant, la séance est gratuite pour vous! Merci de nous soutenir :)"
         else:
-            return "Vous n'êtes pas cotisant, la seance vous coûtera 1€ sur place ou dès maintenant par Lyf au 0768162920"
+            return "Vous n'êtes pas cotisant, la seance sera payante (voir prix en haut de la page). Paiement sur place ou dès maintenant par Lyf au 0768162920"
+    except Exception as e:
+        return jsonify({"error": f"Error in cotisant status check: {str(e)}"}), 500
+    
+
+@app.route('/check_cotisant_backend', methods=['POST'])
+def check_cotisant_backend():
+    try:
+        data = request.get_json()
+        email = data.get('email')
+        phone = data.get('phone')
+        cotisants = Cotisants.query.all()
+        for cotisant in cotisants:
+            cotisant_mail = cotisant.email.lower()
+            cotisant_phone = cotisant.phone.lower()
+            if cotisant_mail== email.lower() or cotisant_phone == phone.lower():
+                return "Oui"
+        else:
+            return "Non"
     except Exception as e:
         return jsonify({"error": f"Error in cotisant status check: {str(e)}"}), 500
 
@@ -445,4 +466,4 @@ def user_to_dict(user):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run(debug=False)
+    app.run(debug=True)
