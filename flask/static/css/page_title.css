@@ -91,7 +91,7 @@ input[type="submit"]:hover {
     font-family: Arial, sans-serif; /* Utiliser la police Arial */
 }
 
-@media (max-width: 1000px){
+@media (max-width: 1200px){
     body {
         background-color: #f0f0f0; /* Fond gris */
         font-family: Arial, sans-serif;
