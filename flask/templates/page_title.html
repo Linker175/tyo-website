@@ -6,13 +6,6 @@
 </head>
 <body>
     <div class="container">
-        <div class="card1">
-            <div class="affiche-image">
-                {% if page.image %}
-                    <img class="image" src="{{ url_for('static', filename='uploads/' + page.image) }}" alt="{{ page.title }} Image">
-                {% endif %}
-            </div>
-        </div>
         <div class="card">
             <h1>Formulaire d'inscription TYO</h1>
             <h2 class= "title-page">{{ page.title }}</h2>
@@ -44,6 +37,13 @@
 
                     <input type="submit" value="S'inscrire">
                 </form>
+            </div>
+        </div>
+        <div class="card1">
+            <div class="affiche-image">
+                {% if page.image %}
+                    <img class="image" src="{{ url_for('static', filename='uploads/' + page.image) }}" alt="{{ page.title }} Image">
+                {% endif %}
             </div>
         </div>
     </div>

@@ -1,27 +1,19 @@
 /* styles.css */
-
-
 body {
     background-color: #f0f0f0; /* Fond gris */
-    display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh; /* Centrer verticalement */
-    margin: 0; /* Supprimer les marges par défaut du body */
     font-family: Arial, sans-serif;
+    margin: 20px;
 }
 
 .container{
     display: flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
     justify-content: center;
-    align-items: center;
-    height: 100%; 
-    margin-top: 40px;   
 }
 
 .card {
-    margin-left: 20px; 
+    margin-left: 10px; 
     background-color: #fff; /* Fond blanc pour la carte */
     border-radius: 10px; /* Coins arrondis pour la carte */
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Ombre pour la carte */
@@ -31,7 +23,7 @@ body {
 }
 
 .card1 {
-    margin-right: 20px ; 
+    margin-right: 10px ; 
     background-color: #fff; /* Fond blanc pour la carte */
     border-radius: 10px; /* Coins arrondis pour la carte */
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Ombre pour la carte */
@@ -39,8 +31,6 @@ body {
     width: 50%; /* Largeur de la carte */
     max-width: 600px; /* Largeur maximale de la carte */
 }
-
-
 
 h1, h2 {
     text-align: center;
@@ -51,29 +41,10 @@ p {
     color: #555; /* Couleur du texte */
     font-family: Arial, sans-serif;
 }
-
-.affiche{
-    display:flex;
-    width: 100%;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-}
-
-
-.affiche-image{
-    margin-right: 1%;
-    width: 100%;
-}
-
+ 
 .image{
     width: 100%;
     height: auto;
-}
-
-.affiche-text{
-    text-overflow: clip;
-    width: 100%;
 }
 
 .form-container {
@@ -85,7 +56,7 @@ p {
 .form-data{
     display: flex;
     flex-direction: column;
-    width: 80%
+    width: 60%
 }
 
 .form {
@@ -95,30 +66,17 @@ p {
     border-radius: 7px; /* Arrondir les coins des formulaires */
 }
 
-.cinema{
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-}
-x
-.cinema-image {
-    display: block;
-    height: auto;
-    width: 110%;
-    margin-left: -5%;
-    position: relative;
-}
-
 input[type="submit"] {
     background-color: #a3aeb9;
     color: white;
-    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     font-size: 16px;
-    cursor: pointer;
     width: 110px;   
+    padding: 10px 20px;
+    cursor: pointer;
     justify-content: center;
+    align-items: center;
 }
 
 input[type="submit"]:hover {
@@ -133,50 +91,44 @@ input[type="submit"]:hover {
     font-family: Arial, sans-serif; /* Utiliser la police Arial */
 }
 
-@media (max-width: 768px){
+@media (max-width: 1000px){
     body {
         background-color: #f0f0f0; /* Fond gris */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 150vh; /* Centrer verticalement */
-        margin: 0; /* Supprimer les marges par défaut du body */
         font-family: Arial, sans-serif;
+        margin: 20px;
     }
     
     .container{
-        margin-top: 20vh;
         display: flex;
-        flex-direction: column-reverse;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin-top: px;
-        margin-bottom: 20px;
     }
-
+    
     .card {
-        margin-top: 0; 
-        margin-left: 0;
-        margin-right: 0;
+        margin-left: 0; 
+        margin-bottom: 10px;
         background-color: #fff; /* Fond blanc pour la carte */
         border-radius: 10px; /* Coins arrondis pour la carte */
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Ombre pour la carte */
         padding: 20px; /* Espacement interne pour le contenu de la carte */
-        width: 80%; /* Largeur de la carte */
-        max-width: 400px; /* Largeur maximale de la carte */
+        width: 90%; /* Largeur de la carte */
+        max-width: 600px; /* Largeur maximale de la carte */
+        height: 60%;
     }
     
     .card1 {
-        margin-top: 40px;
-        margin-left: 0;
-        margin-right: 0;
+        margin-right: 0; 
+        margin-top: 10px;
         background-color: #fff; /* Fond blanc pour la carte */
         border-radius: 10px; /* Coins arrondis pour la carte */
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Ombre pour la carte */
         padding: 20px; /* Espacement interne pour le contenu de la carte */
-        width: 80%; /* Largeur de la carte */
+        width: 90%; /* Largeur de la carte */
         max-width: 600px; /* Largeur maximale de la carte */
+        height: fit-content;
     }
+    
 
     .title-page {
         color: rgb(3, 3, 3); /* Couleur du texte en rouge */
