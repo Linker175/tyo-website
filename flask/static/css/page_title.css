@@ -133,7 +133,7 @@ input[type="submit"]:hover {
     font-family: Arial, sans-serif; /* Utiliser la police Arial */
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px){
     body {
         background-color: #f0f0f0; /* Fond gris */
         display: flex;
@@ -143,7 +143,7 @@ input[type="submit"]:hover {
         margin: 0; /* Supprimer les marges par défaut du body */
         font-family: Arial, sans-serif;
     }
-
+    
     .container{
         margin-top: 20vh;
         display: flex;
