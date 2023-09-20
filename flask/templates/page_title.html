@@ -6,25 +6,22 @@
 </head>
 <body>
     <div class="container">
+        <div class="card1">
+            <div class="affiche-image">
+                {% if page.image %}
+                    <img class="image" src="{{ url_for('static', filename='uploads/' + page.image) }}" alt="{{ page.title }} Image">
+                {% endif %}
+            </div>
+        </div>
         <div class="card">
             <h1>Formulaire d'inscription TYO</h1>
-            <div class="cinema">
-                <!-- <img class="cinema-image" src="{{ url_for('static', filename='cinema.svg')}}" alt="{{ page.title }} Image"> -->
-                <h2 class= "cinema-text">{{ page.title }}</h2>
-            </div>  
-            <div class="affiche">
-                <div class="affiche-image">
-                    {% if page.image %}
-                        <img class="image" src="{{ url_for('static', filename='uploads/' + page.image) }}" alt="{{ page.title }} Image">
-                    {% endif %}
-                </div>
-                <div class="affiche-text">
-                    <p><strong>Date :</strong> {{ page.date }}</p>
-                    <p><strong>Emplacement :</strong> {{ page.location }}</p>
-                    <p><strong>Nombre de places restantes :</strong> {{ places }}</p>
-                    <p>Cette séance est gratuite pour les cotisants TYO, et coûte {{ page.cost }}€ pour les non-cotisants</p>
-                </div>
-            </div> 
+            <h2 class= "title-page">{{ page.title }}</h2>
+            <div class="affiche-text">
+                <p><strong>Date :</strong> {{ page.date }}</p>
+                <p><strong>Emplacement :</strong> {{ page.location }}</p>
+                <p><strong>Nombre de places restantes :</strong> {{ places }}</p>
+                <p>Cette séance est gratuite pour les cotisants TYO, et coûte {{ page.cost }}€ pour les non-cotisants</p>
+            </div>
             <h2>Inscris-toi !</h2>
             <div class="form-container">
                 <form class="form-data" method="POST" action="/page/{{page.title}}" enctype="multipart/form-data">
