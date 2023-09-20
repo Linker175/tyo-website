@@ -1,0 +1,143 @@
+/* Reset des styles par défaut */
+body, h1, h2, p, ul, li, table, th, td, button, form, input, a {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Styles pour le corps de la page */
+body {
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+}
+
+/* Conteneur principal */
+.container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    max-width: 1200px;
+    margin: 20px auto; 
+}
+
+/* Titres */
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 20px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+/* Boutons */
+button {
+    margin-top: 10px;
+    background-color: #a3aeb9;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.button_submit{
+    text-align: center;
+}   
+
+button:hover {
+    background-color: #676f77;
+}
+
+
+
+/* Formulaire */
+form {  
+    display: none;
+    margin-top: 20px;
+}
+
+label {
+    text-align: left;
+    display: block;
+    margin-left: 15px;
+    margin-bottom: 5px;
+}
+
+.add_cotisant{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.center_cotisant{
+    width: 35%;
+}
+
+input[type="text"],
+input[type="email"] {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Tableau */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+   background-color: #f5f5f5;
+}
+
+/* Liens */
+a {
+    text-decoration: none;
+    color: #007BFF;
+}
+
+/* Lien de retour */
+.back-link {
+    display: block;
+    margin-top: 20px;
+    text-align: center;
+    text-decoration: none;
+    padding: 10px;
+    border: 1px solid #ccc;
+    width:200px;
+    color: #333;
+    text-align: center;
+    border-radius: 6px;
+    background-color: #fdf8ea;
+}
+
+.back-link:hover {
+    background-color: rgb(204, 200, 190);
+}

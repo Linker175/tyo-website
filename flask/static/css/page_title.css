@@ -1,24 +1,49 @@
 /* styles.css */
 
-h1 {
-    text-align: center;
+
+body {
+    background-color: #f0f0f0; /* Fond gris */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Centrer verticalement */
+    margin: 0; /* Supprimer les marges par défaut du body */
     font-family: Arial, sans-serif;
-    /*color: whitesmoke;*/
 }
 
-h2 {
-    text-align: center;
-    font-family: Arial, sans-serif;
-    /*color: whitesmoke;*/
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; 
+    margin-top: 40px;   
+        
 }
 
-p{
-    /*color: whitesmoke;*/
+.card {
+    margin: 20px auto; 
+    background-color: #fff; /* Fond blanc pour la carte */
+    border-radius: 10px; /* Coins arrondis pour la carte */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Ombre pour la carte */
+    padding: 20px; /* Espacement interne pour le contenu de la carte */
+    width: 80%; /* Largeur de la carte */
+    max-width: 600px; /* Largeur maximale de la carte */
+}
+
+
+h1, h2 {
+    text-align: center;
+    color: #333; /* Couleur du texte */
+}
+
+p {
+    color: #555; /* Couleur du texte */
     font-family: Arial, sans-serif;
 }
 
 .affiche{
     display:flex;
+    width: 100%;
     flex-direction: row;
     justify-content: center;
     align-items: center;
@@ -27,7 +52,7 @@ p{
 
 .affiche-image{
     margin-right: 1%;
-    width: 20%;
+    width: 40%;
 }
 
 .image{
@@ -49,7 +74,7 @@ p{
 .form-data{
     display: flex;
     flex-direction: column;
-    width: 20%
+    width: 80%
 }
 
 .form {
@@ -64,7 +89,7 @@ p{
     justify-content: center;
     flex-direction: column;
 }
-
+x
 .cinema-image {
     display: block;
     height: auto;
@@ -73,11 +98,28 @@ p{
     position: relative;
 }
 
+input[type="submit"] {
+    background-color: #a3aeb9;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 110px;   
+    justify-content: center;
+}
+
+input[type="submit"]:hover {
+    background-color: #676f77;
+}
+
+
 .cinema-text {
     position: relative;
     /* transform: translate(0,-200px); /* Centre le texte par rapport à son propre centre */
     font-size: 60px; /* Taille du texte en pixels */
-    color: red; /* Couleur du texte en rouge */
+    color: rgb(126, 106, 106); /* Couleur du texte en rouge */
     text-transform: uppercase; /* Mettre le texte en majuscules */
     font-family: Arial, sans-serif; /* Utiliser la police Arial */
 }

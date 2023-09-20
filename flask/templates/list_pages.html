@@ -4,13 +4,16 @@
     <title>Liste des Pages</title>
 </head>
 <body>
-    <h2>Liste des Pages</h2>
-    <ul>
+    <div class="page-list">
         {% for page in pages %}
-            <li>
-                <a href="{{ url_for('page_details', page_id=page.id) }}">{{ page.title }}</a><br>
-            </li>
+            <div class="page-item">
+                <a href="{{ url_for('page_details', page_id=page.id) }}">
+                    <div class="button-container">
+                        {{ page.title }}
+                    </div>
+                </a>
+            </div>
         {% endfor %}
-    </ul>
+    </div>
 </body>
 </html>

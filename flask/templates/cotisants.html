@@ -3,57 +3,63 @@
 <head>
     <title>Modifier les cotisants</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/styles_cotisants.css">
 </head>
 <body>
-    <h1>Modifier les Cotisants</h1>
+    <div class="container">
+        <h1 class="title">Modifier les Cotisants</h1>
 
-    <!-- Button to toggle the "Add Cotisant" form -->
-    <button id="toggle-form-button">Ajouter un nouveau cotisant</button>
+        <!-- Button to toggle the "Add Cotisant" form -->
+        <button id="toggle-form-button">Ajouter un nouveau cotisant</button>
 
-    <!-- Form for adding cotisants (initially hidden) -->
-    <form method="POST" action="/add_cotisant" id="add-cotisant-form" style="display: none;">
-        <label>Last Name:</label>
-        <input type="text" name="lastname" required><br>
-        <label>First Name:</label>
-        <input type="text" name="firstname" required><br>
-        <label>Email:</label>
-        <input type="email" name="email" required><br>
-        <label>Phone:</label>
-        <input type="text" name="phone" required><br>
-        <button type="submit">Ajouter un cotisant</button>
-    </form>
+        <!-- Form for adding cotisants (initially hidden) -->
+        <div class="add_cotisant">
+            <div class="center_cotisant">
+                <form method="POST" action="/add_cotisant" id="add-cotisant-form" style="display: none;">
+                    <label>Last Name:</label>
+                    <input type="text" name="lastname" required><br>
+                    <label>First Name:</label>
+                    <input type="text" name="firstname" required><br>
+                    <label>Email:</label>
+                    <input type="email" name="email" required><br>
+                    <label>Phone:</label>
+                    <input type="text" name="phone" required><br>
+                    <button class = "button_submit" type="submit">Ajouter un cotisant</button>
+                </form>
+            </div>
+        </div>
 
-    <!-- Display the list of cotisants -->
-    <h2>Liste des Cotisant</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Email</th>
-                <th>Téléphone</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for cotisant in cotisants %}
-                <tr class=cotisant{{cotisant.id}}>
-                    <td>{{ cotisant.lastname }}</td>
-                    <td>{{ cotisant.firstname }}</td>
-                    <td>{{ cotisant.email }}</td>
-                    <td>{{ cotisant.phone }}</td>
-                    <td>
-                        <button class="delete-cotisant" data-cotisant-id="{{ cotisant.id }}">Supprimer</button>
-                        <button class="update-cotisant" data-cotisant-id="{{ cotisant.id }}" data-cotisant-lastname="{{ cotisant.lastname }}" data-cotisant-firstname="{{ cotisant.firstname}}" data-cotisant-email="{{ cotisant.email}}" data-cotisant-phone="{{ cotisant.phone}}">Modifier</button>
-                    </td>
+        <!-- Display the list of cotisants -->
+        <h2 class="subtitle">Liste des Cotisants</h2>
+        <table class="cotisant-table">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Téléphone</th>
+                    <th>Action</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for cotisant in cotisants %}
+                    <tr class="cotisant{{ cotisant.id }}">
+                        <td class="cotisant-lastname">{{ cotisant.lastname }}</td>
+                        <td class="cotisant-firstname">{{ cotisant.firstname }}</td>
+                        <td class="cotisant-email">{{ cotisant.email }}</td>
+                        <td class="cotisant-phone">{{ cotisant.phone }}</td>
+                        <td>
+                            <button class="delete-cotisant" data-cotisant-id="{{ cotisant.id }}">Supprimer</button>
+                            <button class="update-cotisant" data-cotisant-id="{{ cotisant.id }}" data-cotisant-lastname="{{ cotisant.lastname }}" data-cotisant-firstname="{{ cotisant.firstname }}" data-cotisant-email="{{ cotisant.email }}" data-cotisant-phone="{{ cotisant.phone }}">Modifier</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <a href="{{ url_for('home') }}">Retour à la page d'accueil</a>
-    
-    <!-- JavaScript to toggle the form's visibility -->
+        <a href="{{ url_for('home') }}" class="back-link">Retour à la page d'accueil</a>
+    </div>
+
 
     <script>
         document.getElementById('toggle-form-button').addEventListener('click', function() {

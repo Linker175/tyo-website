@@ -1,20 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page d'Accueil</title>
+    <link rel="stylesheet" type="text/css" href="static/css/styles_home.css">
 </head>
 <body>
-    <h1>Page d'Accueil</h1>
-    
-    {% include 'list_pages.html' %}
-    <h2> Pages </h2>
-    <form method="GET" action="/create_page">
-        <input type="submit" value="Créer une Nouvelle Page">
-    </form>
+    <div class="container">
+        <h1>Page d'Accueil</h1>
+        
+        <div class="pages-section">
+            <h2>Pages</h2>
+            {% include 'list_pages.html' %}
+            <form method="GET" action="/create_page">
+                <button type="submit">Créer une Nouvelle Page</button>
+            </form>
+        </div>
 
-    <h2>Cotisants</h2>
-    <form method="GET" action="/edit_cotisants">
-        <input type="submit" value="Accéder à la liste des cotisants">
-    </form>
+        <div class="cotisants-section">
+            <h2>Cotisants</h2>
+            <form method="GET" action="/edit_cotisants">
+                <button type="submit">Accéder à la liste des cotisants</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

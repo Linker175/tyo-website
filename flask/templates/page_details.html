@@ -1,80 +1,91 @@
 <!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Détails de la Page</title>
+    <link rel="stylesheet" type="text/css" href="static/css/page_details.css">  
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <h1>Détails de la Page</h1>
-    <h2>{{ page.title }}</h2>
-    <p><strong>Date :</strong> {{ page.date }}</p>
-    <p><strong>Emplacement :</strong> {{ page.location }}</p>
-    <p><strong>Nombre Maximum de Participants :</strong> {{ page.max_participants }}</p>
-    <p><strong>Coût :</strong> {{ page.cost }}</p>
-    
-    {% if page.image %}
-        <img src="{{ url_for('static', filename='uploads/' + page.image) }}" alt="{{ page.title }} Image">
-    {% endif %}
-    
-    <h2>Liste des Inscrits</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Email</th>
-                <th>Téléphone</th>
-                <th>Cotisant</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in users %}
-                <tr class=user{{user.id}}>
-                    <td>{{ user.lastname }}</td>
-                    <td>{{ user.firstname }}</td>
-                    <td class="email">{{ user.email }}</td>
-                    <td class="phone">{{ user.phone }}</td>
-                    <td class="cotisant"></td>
-                    <td>
-                        <button class="delete-user" data-user-id="{{ user.id }}">Supprimer</button>
-                        <button class="update-user" data-user-id="{{ user.id }}" data-user-lastname="{{ user.lastname }}" data-user-firstname="{{ user.firstname}}" data-user-email="{{ user.email}}" data-user-phone="{{ user.phone}}">Modifier</button>
-                    </td>
-                </tr>
-            {% endfor %} 
-        </tbody>
-    </table>
+    <div class="container">
+        <div class="card">
+            <h1>Détails de la Page</h1>
+            <h2>{{ page.title }}</h2>
+            <p><strong>Date :</strong> {{ page.date }}</p>
+            <p><strong>Emplacement :</strong> {{ page.location }}</p>
+            <p><strong>Nombre Maximum de Participants :</strong> {{ page.max_participants }}</p>
+            <p><strong>Coût :</strong> {{ page.cost }}</p>
+            
+            {% if page.image %}
+                <img class=image src="{{ url_for('static', filename='uploads/' + page.image) }}" alt="{{ page.title }} Image">
+            {% endif %}
+            
+            <h2>Liste des Inscrits</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                        <th>Cotisant</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr class=user{{user.id}}>
+                            <td>{{ user.lastname }}</td>
+                            <td>{{ user.firstname }}</td>
+                            <td class="email">{{ user.email }}</td>
+                            <td class="phone">{{ user.phone }}</td>
+                            <td class="cotisant-{{ loop.index }}"></td>
+                            <td>
+                                <button class="delete-user" data-user-id="{{ user.id }}">Supprimer</button>
+                                <button class="update-user" data-cotisant-class="cotisant-{{loop.index}}" data-user-id="{{ user.id }}" data-user-lastname="{{ user.lastname }}" data-user-firstname="{{ user.firstname}}" data-user-email="{{ user.email}}" data-user-phone="{{ user.phone}}">Modifier</button>
+                            </td>
+                        </tr>
+                    {% endfor %} 
+                </tbody>
+            </table>
 
-    <br> 
+            <br> 
 
-    <button id="toggle-form-button">Ajouter un nouveau participant</button>
+            <button id="toggle-form-button">Ajouter un nouveau participant</button>
 
-        <!-- Form for adding cotisants (initially hidden) -->
-    <form method="POST" action="/add_user/{{page.id}}" id="add-user-form" style="display: none;">
-        <label>Last Name:</label>
-        <input type="text" name="lastname" required><br>
-        <label>First Name:</label>
-        <input type="text" name="firstname" required><br>
-        <label>Email:</label>
-        <input type="email" name="email" required><br>
-        <label>Phone:</label>
-        <input type="text" name="phone" required><br>
-        <button type="submit">Ajouter</button>
-    </form>
-    
-    <br>
-    <br>
-    
-    <a href="{{ url_for('download_users_ods', page_id=page.id) }}" class="btn btn-primary">Télécharger les utilisateurs au format. ods</a><br>
-    <a href="{{ url_for('download_users_pdf', page_id=page.id) }}" class="btn btn-primary">Télécharger les utilisateurs au format. pdf</a><br>
+            <!-- Form for adding cotisants (initially hidden) -->
+            <form method="POST" action="/add_user/{{page.id}}" id="add-user-form" style="display: none;">
+                <label>Last Name:</label>
+                <input type="text" name="lastname" required><br>
+                <label>First Name:</label>
+                <input type="text" name="firstname" required><br>
+                <label>Email:</label>
+                <input type="email" name="email" required><br>
+                <label>Phone:</label>
+                <input type="text" name="phone" required><br>
+                <button type="submit">Ajouter</button>
+            </form>
+            
+            <br>
+            <br>
+            
+            <a href="{{ url_for('download_users_ods', page_id=page.id) }}" class="btn btn-primary">Télécharger les utilisateurs au format. ods</a><br>
+            <a href="{{ url_for('download_users_pdf', page_id=page.id) }}" class="btn btn-primary">Télécharger les utilisateurs au format. pdf</a><br>
 
-    <br><br>
+            <br><br>
 
-    <button id="send-email-button">Envoyer la liste par e-mail</button>
+            <button id="send-email-button">Envoyer la liste par e-mail</button>
 
-    <br><br>
-
-    <a href="{{ url_for('home') }}">Retour à la page d'accueil</a>
+            <br><br>
+            
+            <div class="return-button">
+                <a class="back-link" href="{{ url_for('home') }}">Retour à la page d'accueil</a>
+            </div>
+        </div>
+    </div>
+</body>
 
     <script>
         document.getElementById('toggle-form-button').addEventListener('click', function() {
@@ -87,7 +98,39 @@
         });
     </script>
 
+    <script>
+        function updateCotisantStatus() {
+            console.log("called")
+            // Récupérez tous les éléments avec la classe "email" et "phone"
+            const emailElements = document.querySelectorAll(".email");
+            const phoneElements = document.querySelectorAll(".phone");
 
+            // Parcourez chaque utilisateur
+            emailElements.forEach((emailElement, index) => {
+                const email = emailElement.textContent;
+                const phone = phoneElements[index].textContent;
+                const data = { email, phone };
+
+                fetch("/check_cotisant_backend", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.text())
+                .then(cotisantStatus => {
+                
+                    const cotisantElement = document.querySelector(`.cotisant-${index+1}`);
+                    cotisantElement.textContent = cotisantStatus;
+                })
+                .catch(error => {
+                    console.error("Erreur lors de la requête à /check_cotisant_backend:", error);
+                });
+            });
+        } 
+        window.addEventListener("load", updateCotisantStatus); 
+    </script>
 
     <script>
         $(document).ready(function() {
@@ -145,12 +188,14 @@
                 var userFirstname = $(this).data("user-firstname");
                 var userEmail = $(this).data("user-email");
                 var userPhone = $(this).data("user-phone");
+                var userCotisantClass = $(this).data("cotisant-class");
 
                 originalUserData[userId] = {
                     lastname: userLastname,
                     firstname: userFirstname,
                     email: userEmail,
-                    phone: userPhone
+                    phone: userPhone,
+                    cotisantClass : userCotisantClass,
                 };
 
                 var userRow = $(".user" + userId);
@@ -160,6 +205,7 @@
                         <td><input type="text" name="firstname" value="${userFirstname}"></td>
                         <td><input type="text" name="email" value="${userEmail}"></td>
                         <td><input type="text" name="phone" value="${userPhone}"></td>
+                        <td><td>
                         <td>
                             <button class="save-update" data-user-id="${userId}">Sauvegarder</button>
                             <button class="cancel-update" data-user-id="${userId}">Annuler</button>
@@ -176,6 +222,7 @@
                 var updatedFirstname = $(`.user${userId} input[name="firstname"]`).val();
                 var updatedEmail = $(`.user${userId} input[name="email"]`).val();
                 var updatedPhone = $(`.user${userId} input[name="phone"]`).val();
+                var updatedCotisantClass = originalUserData[userId].cotisantClass;
 
                 $.ajax({
                     url: "/update_user",
@@ -193,15 +240,17 @@
                             <tr class="user${userId}">
                                 <td>${updatedLastname}</td>
                                 <td>${updatedFirstname}</td>
-                                <td>${updatedEmail}</td>
-                                <td>${updatedPhone}</td>
+                                <td class="email">${updatedEmail}</td>
+                                <td class="phone">${updatedPhone}</td>
+                                <td class=${updatedCotisantClass}></td>
                                 <td>
                                     <button class="delete-user" data-user-id="${userId}">Supprimer</button>
-                                    <button class="update-user" data-user-id="${userId}" data-user-lastname="${updatedLastname}" data-user-firstname="${updatedFirstname}" data-user-email="${updatedEmail}" data-user-phone="${updatedPhone}">Modifier</button>
+                                    <button class="update-user" data-user-id="${userId}" data-cotisant-class="${updatedCotisantClass}" data-user-lastname="${updatedLastname}" data-user-firstname="${updatedFirstname}" data-user-email="${updatedEmail}" data-user-phone="${updatedPhone}">Modifier</button>
                                 </td>
                             </tr>
                         `;
                         $(".user" + userId).replaceWith(userRowHtml);
+                        updateCotisantStatus();
                     },
                     error: function(error) {
                         console.error(error);
@@ -216,29 +265,31 @@
                 var userId = $(this).data("user-id");
                 restoreOriginalUserData(userId);
             });
-        });
 
-        function restoreOriginalUserData(userId) {
+            function restoreOriginalUserData(userId) {
             var userLastname = originalUserData[userId].lastname;
             var userFirstname = originalUserData[userId].firstname;
             var userEmail = originalUserData[userId].email;
             var userPhone = originalUserData[userId].phone;
+            var userCotisantClass =  originalUserData[userId].cotisantClass;
 
             var userRowHtml = `
                 <tr class="user${userId}">
                     <td>${userLastname}</td>
                     <td>${userFirstname}</td>
-                    <td>${userEmail}</td>
-                    <td>${userPhone}</td>
+                    <td class="email">${userEmail}</td>
+                    <td class="phone">${userPhone}</td>
+                    <td class=${userCotisantClass}></td>
                     <td>
                         <button class="delete-user" data-user-id="${userId}">Supprimer</button>
-                        <button class="update-user" data-user-id="${userId}" data-user-lastname="${userLastname}" data-user-firstname="${userFirstname}" data-user-email="${userEmail}" data-user-phone="${userPhone}">Modifier</button>
+                        <button class="update-user" data-user-id="${userId}" data-cotisant-class="${userCotisantClass}" data-user-lastname="${userLastname}" data-user-firstname="${userFirstname}" data-user-email="${userEmail}" data-user-phone="${userPhone}">Modifier</button>
                     </td>
                 </tr>
             `;
-
             $(".user" + userId).replaceWith(userRowHtml);
-        }
+            updateCotisantStatus();
+        } 
+        });
     </script>
     
     <script>
@@ -340,43 +391,4 @@
         });
     </script>
 
-    <script>
-        function updateCotisantStatus() {
-            // Récupérez tous les éléments avec la classe "email" et "phone"
-            const emailElements = document.querySelectorAll(".email");
-            const phoneElements = document.querySelectorAll(".phone");
-
-            // Parcourez chaque utilisateur
-            emailElements.forEach((emailElement, index) => {
-                const email = emailElement.textContent;
-                const phone = phoneElements[index].textContent;
-
-                // Créez un objet JSON avec les données d'email et de téléphone
-                const data = { email, phone };
-
-                // Envoyez une requête POST au serveur pour vérifier le statut cotisant
-                fetch("/check_cotisant_backend", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(response => response.text())
-                .then(cotisantStatus => {
-                    // Mettez à jour l'élément "cotisant" en conséquence
-                    const cotisantElement = document.querySelector(".cotisant");
-                    cotisantElement.textContent = cotisantStatus;
-                })
-                .catch(error => {
-                    console.error("Erreur lors de la requête à /check_cotisant_backend:", error);
-                });
-            });
-        }
-
-        // Appelez la fonction pour mettre à jour le statut cotisant lors du chargement de la page
-        window.addEventListener("load", updateCotisantStatus);
-    </script>
-
-</body>
 </html>

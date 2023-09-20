@@ -1,0 +1,139 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f0f0;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 20px auto; 
+    padding: 20px;
+    width: 1200px;
+    text-align: center;
+    max-width: 80%; /* Réduire la largeur du formulaire pour les appareils mobiles */
+}
+
+.image{
+    max-width: 70%;
+}
+
+h1 {
+    color: #333;
+}
+
+h2 {
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+p {
+    margin: 10px 0;
+}
+
+table {
+    justify-content: center;
+    width: 70%;
+    border-collapse:collapse;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+button {
+    margin-top: 10px;
+    background-color: #a3aeb9;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: #676f77;
+}
+
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+
+/* Média queries pour les appareils mobiles */
+@media (max-width: 480px) {
+    .container {
+        padding: 5px;
+    }
+
+    .card {
+        width: 100%;
+    }   
+
+    table {
+        width: 105%;
+        font-size: 14px;
+        overflow-x: auto;
+        display: block;
+    }
+
+    th, td {
+        white-space: nowrap;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    th, td {
+        min-width: 100px;
+        padding: 8px;
+        text-align: left;
+    }
+}
+
+
+.back-link {
+    text-align: center;
+    text-decoration: none;
+    padding: 10px;
+    border: 1px solid #ccc;
+    width:200px;
+    color: #333;
+    text-align: center;
+    border-radius: 6px;
+    background-color: #fdf8ea;
+}
+
+.back-link:hover {
+    background-color: rgb(204, 200, 190);
+}
+
+.return-button{
+    margin-top: 20px;
+    margin-bottom: 10px;
+    width:100%;
+    display: block;
+    text-align: left;
+}
