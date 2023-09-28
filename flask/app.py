@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, abort
+from flask import Flask, render_template, request, redirect, url_for, jsonify, abort, flash
 from flask_login import LoginManager, UserMixin, login_user, current_user
 from functools import wraps
 from flask import redirect, url_for, flash
@@ -6,6 +6,10 @@ import bcrypt
 import pyotp
 from flask_sqlalchemy import SQLAlchemy
 from flask_uploads import UploadSet, configure_uploads, IMAGES
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired, Email, Length
+from flask_wtf.csrf import CSRFProtect
 from flask import send_file
 import pyexcel as pe
 from io import BytesIO
@@ -18,7 +22,7 @@ from email.mime.multipart import MIMEMultipart
 from flask import request, jsonify
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pages.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pages.db'    
 db = SQLAlchemy(app)
 
 photos = UploadSet("photos", IMAGES)
@@ -73,6 +77,13 @@ class Cotisants(db.Model):
     firstname = db.Column(db.String(100))
     email = db.Column(db.String(100))
     phone = db.Column(db.String(8))
+
+class Clientform(FlaskForm):
+    lastname = StringField('Nom', validators=[DataRequired(), Length(max=50)])
+    firstname = StringField('Prénom', validators=[DataRequired(), Length(max=50)])
+    email = StringField('Email', validators=[DataRequired(), Email(), Length(max=100)])
+    phone = StringField('Téléphone', validators=[DataRequired(), Length(max=20)])
+    bouton_envoyer = SubmitField('S\'inscrire')
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -155,23 +166,28 @@ def page_details(page_id):
 @app.route('/page/<string:title>', methods=['GET', 'POST'])
 def page_title(title):
     page = Page.query.filter_by(title=title).first()
-    if request.method == 'POST':
-        lastname = request.form.get('lastname')
-        firstname = request.form.get('firstname')
-        email = request.form.get('email')
-        phone = request.form.get('phone')
-        if function_check_registration(email, phone, firstname, lastname, title)=="False":
+    form = Clientform()
+   
+    if form.validate_on_submit():
+        lastname = form.lastname.data
+        firstname = form.firstname.data
+        email = form.email.data
+        phone = form.phone.data
+
+        if function_check_registration(email, phone, firstname, lastname, title) == "False":
             new_user = User(title=title, lastname=lastname, firstname=firstname, email=email, phone=phone)
             db.session.add(new_user)
             db.session.commit()
+            flash('Inscription réussie !', 'success')  # Flash un message de succès
             return redirect('/thanks')
         else:
-            return "Utilisateur déjà enregistré avec cette combinaison nom/prénom, cette adresse mail ou ce numéro de téléphone"
+            flash('Utilisateur déjà enregistré avec cette combinaison nom/prénom, cette adresse mail ou ce numéro de téléphone', 'danger')  # Flash un message d'erreur
+
     if page:
         users = User.query.filter_by(id=page.id).all()
         if users:
             places = page.max_participants - len(users)
-            return render_template('page_title.html', page=page, places=places)
+            return render_template('page_title.html', page=page, places=places, form=form)
     else:
         return "Page non trouvée"
     
@@ -230,7 +246,7 @@ def update_user():
 
 @app.route('/thanks', methods=['GET', 'POST'])
 def thanks():
-    return "Thanks for your inscription, see you soon :)"    
+    return "Merci pour votre inscription, à bientôt :)"    
 
 @app.route('/download_users_ods/<int:page_id>')
 def download_users_ods(page_id):

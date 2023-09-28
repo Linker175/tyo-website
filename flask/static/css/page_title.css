@@ -59,11 +59,12 @@ p {
     width: 60%
 }
 
-.form {
+.form-control {
     border: 1px solid #ccc; /* Ajoutez une bordure pour les formulaires */
     padding: 6px; /* Ajoutez un espace intérieur aux formulaires */
     margin-bottom: 10px; /* Ajoutez un espace entre les formulaires */
     border-radius: 7px; /* Arrondir les coins des formulaires */
+    width: 100%;
 }
 
 input[type="submit"] {

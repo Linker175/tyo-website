@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title class="title">{{ page.title }}</title>
+    <title class="title">TYO {{ page.title }}</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/page_title.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='uploads/favicon.ico') }}" type="image/x-icon">
 </head>
 <body>
     <div class="container">
@@ -17,25 +18,42 @@
             </div>
             <h2>Inscris-toi !</h2>
             <div class="form-container">
-                <form class="form-data" method="POST" action="/page/{{page.title}}" enctype="multipart/form-data">
-                    <label for="lastname">Nom :</label>
-                    <input class="form" type="text" name="lastname" id="lastname" required>
-                    
-                    <label for="firstname">Prénom :</label>
-                    <input class="form" type="text" name="firstname" id="firstname" required>
-                    
-                    <label for="email">Email :</label>
-                    <input class="form" type="text" name="email" id="email" required>
-
-                    <label for="phone">Téléphone :</label>
-                    <input class="form" type="text" name="phone" id="phone" required>
-                    
-                    <div>
-                    <p class="reponse"></p>
-                    <p class="reponse2"></p>
+                <form class="form-data" method="POST" action="/page/{{ page.title }}" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    <div class="form-group">
+                        {{ form.lastname.label(class="control-label") }} <br>
+                        {{ form.lastname(class="form-control", id="lastname") }}
+                        {% for erreur in form.lastname.errors %}
+                            <span class="erreur">{{ erreur }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.firstname.label(class="control-label") }} <br>
+                        {{ form.firstname(class="form-control", id="firstname") }}
+                        {% for erreur in form.firstname.errors %}
+                            <span class="erreur">{{ erreur }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.email.label(class="control-label") }} <br>
+                        {{ form.email(class="form-control", id="email") }}
+                        {% for erreur in form.email.errors %}
+                            <span class="erreur">{{ erreur }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.phone.label(class="control-label") }} <br>
+                        {{ form.phone(class="form-control", id="phone", pattern="^\+?\d{12,13}$|^\d{10}$", title="Le numéro de téléphone doit contenir 10 chiffres. (Il peut commencer par un + et aller jusqu'à 14 chiffres pour les numéros de téléphone étrangers)") }}
+                        {% for erreur in form.phone.errors %}
+                            <span class="erreur">{{ erreur }}</span>
+                        {% endfor %}
                     </div>
 
-                    <input type="submit" value="S'inscrire">
+                    {{ form.bouton_envoyer(class="btn btn-primary") }}
+                    
+                    <p class="reponse"></p>
+                    <p class="reponse2"></p>
+                    
                 </form>
             </div>
         </div>
